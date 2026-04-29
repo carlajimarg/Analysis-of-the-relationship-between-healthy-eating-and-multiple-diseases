@@ -1,0 +1,206 @@
+---
+title: "objective 5"
+author: "Carla"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    df_print: paged
+---
+
+```{r setup, include=FALSE}
+library(knitr)
+library(tidyverse)
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Carga de datos
+
+The aim of this study is to evaluate the relationship between various health indicators and the healthcare expenditure, which will be carried out using a correlation analysis. 
+
+
+```{r}
+library(dplyr)
+
+objective5 = read.csv("gastsalenferm_bien.csv")
+objective5$GastoRelativo <- objective5$Porcentaje.gastos_log / objective5$Gasto.total
+
+objective5 <- objective5 %>%
+  select(-c(Sexo, Porcentaje.gastos, Gasto.total))
+
+summary(objective5)
+objective5
+```
+
+```{r}
+unique(objective5$Region)
+```
+Only countries from the Americas region are included in this dataset.
+
+In order to choose the appropriate correlation method, it should be taken into account the data distribution of the variables.
+
+
+```{r}
+
+datos = objective5[, c("Media.obes", "Prev.hiper", "Prev.cardiac", "Prev.diab", "GastoRelativo")]
+
+par(mfrow = c(2, 3))
+for (d in names(datos)) {
+  hist(datos[[d]],
+       main = d,
+       xlab = "Escala estandarizada",
+       col = "lightblue",
+       breaks = 30)
+}
+
+par(mfrow = c(2, 3))
+for (d in names(datos)) {
+  boxplot(datos[[d]], main = d, col = "salmon")
+}
+
+
+```
+Pearson is suitable for variables that are normally distributed and without outliers. Considering that variables like GastoRelativo exhibit a skewed distribution, Spearman seems more adequate. Additionally, variables such as media.obesidad and diabetes prevalence have a vast amount of outliers, which enforces the use of the Spearman correlation coefficient, as it is more robust tan Pearson.
+
+
+Porcentaje Gastos: Expenditure on health as a percentage of GDP per capita(%).
+Gasto.total: General government expenditure on health as a percentage of total government expenditure (%).
+
+```{r}
+corMatriz = cor(datos, method = "spearman")
+
+corMatriz
+```
+
+
+```{r}
+library(ggplot2)
+
+cortot = as.data.frame(as.table(corMatriz))
+
+ggplot(cortot, aes(Var1, Var2, fill = Freq)) +
+  geom_tile() +
+  geom_text(aes(label = round(Freq, 2))) +
+  scale_fill_gradient2(low = "blue3", high = "red3", mid = "white", midpoint = 0)
+
+
+
+```
+At first glance, the results do not appear to be related. However, the correlations will be shown separately for each country. With this, it will be possible to examine possible specific patterns that might not be evident in a general analysis.
+
+
+```{r}
+
+corrgasto = objective5 %>%
+  group_by(Pais) %>%
+  summarize(cor_card = cor(GastoRelativo, Prev.cardiac, method = "spearman", use = "complete.obs"),
+            cor_diab = cor(GastoRelativo, Prev.diab, method = "spearman", use = "complete.obs"),
+            cor_hiper = cor(GastoRelativo, Prev.hiper, method = "spearman", use = "complete.obs"),
+            cor_obes = cor(GastoRelativo, Media.obes, method = "spearman", use = "complete.obs"))
+corrgasto = na.omit(corrgasto)
+corrgasto
+```
+
+```{r}
+
+
+# Convertir a formato largo
+corrTotal = corrgasto %>%
+  pivot_longer(cols = starts_with("cor_"), 
+               names_to = "Variable", 
+               values_to = "Correlation")
+
+# Cambiar nombres de variables
+corrTotal$Variable = recode(corrTotal$Variable,
+                             cor_card = "Cardiovascular",
+                             cor_diab = "Diabetes",
+                             cor_hiper = "Hypertension",
+                             cor_obes = "Obesidad")
+
+ 
+ggplot(corrTotal, aes(x = Variable, y = reorder(Pais, -Correlation), fill = Correlation)) +
+  geom_tile(color = "white", linewidth = 0.5) + #de mayor a menor correlación
+  geom_text(aes(label = round(Correlation, 2)), size = 3, color = "black") +
+  scale_fill_gradient2(low = "blue3", mid = "white", high = "red3", midpoint = 0,
+                       name = "Correlation") +
+  labs(title = "Correlation between Healthcare and Illnesses by Country",
+       x = "Illness", y = "Country") +
+  theme_minimal(base_size = 12) +
+  theme(plot.title = element_text(size = 12))
+
+
+```
+
+```{r}
+library(NbClust)
+cordatos = corrgasto[, -1]
+
+
+# Clustering
+distancias = dist(cordatos)
+hc = hclust(distancias, method = "ward.D2")
+nb = NbClust(cordatos, distance = "manhattan",
+              min.nc = 2, max.nc = 6, method = "median")
+
+clusters = cutree(hc, k = 3)
+
+corrgasto$cluster = factor(clusters)
+
+```
+
+
+```{r}
+library(sf)
+library(rnaturalearth)
+library(rnaturalearthdata)
+
+america = ne_countries(scale = "medium", returnclass = "sf") %>%
+  filter(region_un == "Americas")
+
+america = left_join(america, corrgasto[, c("Pais", "cluster")], by = c("admin" = "Pais"))
+
+ggplot(america) +
+  geom_sf(aes(fill = cluster)) +
+  scale_fill_manual(values = c("1" = "salmon", "2" = "lightgreen", "3" = "skyblue"),
+                    na.value = "lightgray") +
+  labs(title = "Countries by Clusters about the Correlations with Healthcare", fill = "Cluster") + theme_minimal()
+
+
+```
+
+```{r}
+ggplot(corrgasto, aes(x = 1, y = Pais, fill = cluster)) +
+  geom_col() +
+  labs(title = "Clusters by Country", x = "Presence", y = "Country", fill = "Cluster") +
+  scale_fill_manual(values = c("1" = "salmon", "2" = "lightgreen", "3" = "skyblue")) +
+  theme_minimal()
+
+
+```
+
+
+```{r}
+
+medias = corrgasto %>%
+  group_by(cluster) %>%
+  summarise(across(where(is.numeric), mean))
+
+mediastot <- medias %>%
+  pivot_longer(cols = starts_with("cor_"), names_to = "Indicador", values_to = "Promedio") %>%
+  mutate(Indicador = recode(Indicador,
+                            cor_card = "Cardiovascular",
+                            cor_diab = "Diabetes",
+                            cor_hiper = "Hypertension",
+                            cor_obes = "Obesity"))
+
+ggplot(mediastot, aes(x = factor(cluster), y = Promedio, fill = factor(cluster))) +
+  geom_bar(stat = "identity") +
+  geom_text(aes(label = round(Promedio, 2)), vjust = -0.3, size = 3) +
+  facet_wrap(~ Indicador) +     # subgráfico por enfermedad
+  scale_fill_manual(values = c("1" = "salmon", "2" = "lightgreen", "3" = "skyblue")) +
+  labs(title = "Average correlations by Clusters",
+       x = "Cluster", y = "Average Correlation", fill = "Cluster") +
+  theme_minimal()
+
+
+```
+

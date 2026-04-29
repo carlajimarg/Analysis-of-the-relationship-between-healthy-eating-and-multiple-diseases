@@ -1,0 +1,252 @@
+---
+title: "hito2"
+author: "Carla"
+date: "`r Sys.Date()`"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+```{r}
+library(dplyr)
+diabetes = read.csv("diabetes.csv")
+pib = read.csv("pib.csv")
+obesidad = read.csv("obesidad.csv")
+hipertension = read.csv("hipertension.csv")
+esperanza = read.csv("esperanza.csv")
+cardiacas = read.csv("cardiacas.csv")
+alimentos = read.csv("cantidadalimentos.csv")
+comida = read.csv("ingesta.csv")
+calorias = read.csv("calorias.csv")
+```
+
+```{r}
+cardiacas$Valor <- as.numeric(gsub(",", ".", cardiacas$Valor))
+cardiacas$Min <- as.numeric(gsub(",", ".", cardiacas$Min))
+cardiacas$Max <- as.numeric(gsub(",", ".", cardiacas$Max))
+
+cardiacas <- cardiacas %>%
+  select(-c(Min, Max))
+
+```
+```{r}
+unique(calorias$Producto)
+calorias$Producto[calorias$Producto == " Animal"] = "Animal"
+calorias$Producto[calorias$Producto == "Total  "] = "Total"
+calorias$Producto[calorias$Producto == " Total"] = "Total"
+calorias$Producto[calorias$Producto == " Total "] = "Total"
+calorias$Producto[calorias$Producto == "Total "] = "Total"
+calorias$Producto[calorias$Producto == " Vegetal"] = "Vegetal"
+
+unique(calorias$Producto)
+
+```
+
+
+```{r}
+summary(diabetes)
+```
+
+
+
+```{r}
+calorias$Pais <- trimws(calorias$Pais)
+calorias$Pais[calorias$Pais == "European Union - 27 countries"] = "European Union"
+unique(calorias$Pais)
+```
+
+
+```{r}
+library(tidyverse)
+library(dplyr)
+library(tidyr)
+
+calbien <- calorias %>%
+  pivot_longer(cols = -c(Producto, Pais), names_to = "Año", values_to = "Kcal")
+calbien$Año <- gsub("^X", "", calbien$Año)
+
+calbien
+calorias
+```
+
+crear columnas para cada tipo de producto con sus calorías, para que no existan tantas filas.
+```{r}
+calbien <- calbien %>%
+  pivot_wider(
+    names_from = Producto,
+    values_from = Kcal,
+    names_glue = "{Producto}.kcal")
+calbien
+
+
+```
+
+Aquí solo hay de Europa.
+```{r}
+esperanza
+calesperanza <- merge(calbien, esperanza, by = c("Pais", "Año"))
+calesperanza
+```
+
+```{r}
+names(diabetes)[names(diabetes) == "Sex"] <- "Sexo"
+names(diabetes)[names(diabetes) == "Year"] <- "Año"
+names(diabetes)[names(diabetes) == "Crude.diabetes.prevalence"] <- "Prev.diab"
+names(diabetes)[names(diabetes) == "Country.Region.World"] <- "Pais"
+names(diabetes)[names(diabetes) == "Lower.95..uncertainty.interval"] <- "Lim.Inf"
+names(diabetes)[names(diabetes) == "Upper.95..uncertainty.interval"] <- "Lim.Sup"
+
+
+names(cardiacas)
+names(diabetes)
+```
+
+
+```{r}
+names(cardiacas)[names(cardiacas) == "Region"] <- "Pais"
+names(cardiacas)[names(cardiacas) == "Year"] <- "Año"
+cardiacas$Sexo[cardiacas$Sexo == "Masculino"] <- "Men"
+cardiacas$Sexo[cardiacas$Sexo == "Femenino"] <- "Women"
+cardiacasdiab <- merge(cardiacas, diabetes, by = c("Pais", "Sexo", "Año"))
+cardiacasdiab <- cardiacasdiab[cardiacasdiab$Grupo != "Estandarizada edad", ]
+cardiacasdiab
+```
+La prevalencia cruda está mal, así que se cambia a bien.
+```{r}
+cardiabameric <- cardiacasdiab %>%
+  select(-c(Grupo, ISO, Lim.Inf, Lim.Sup))
+cardiabameric
+```
+
+```{r}
+hipertension$Valor <- as.numeric(gsub(",", ".",hipertension$Valor))
+hipertension$Minimo.valor <- as.numeric(gsub(",", ".", hipertension$Minimo.valor))
+hipertension$Maximo.valor <- as.numeric(gsub(",", ".", hipertension$Maximo.valor))
+names(hipertension)[names(hipertension) == "Zona"] <- "Pais"
+hipertension$Sexo[hipertension$Sexo == "Male"] <- "Men"
+hipertension$Sexo[hipertension$Sexo == "Female"] <- "Women"
+hipertension <- hipertension %>%
+  select(-c(Minimo.valor, Maximo.valor, Indicador))
+hipertension
+```
+solo los que son +18.
+```{r}
+hipertension <- hipertension[hipertension$Edad == "18+ years", ]
+hipertension <- hipertension %>%
+  select(-Edad)
+hipertension
+```
+
+juntar
+```{r}
+names(hipertension)[names(hipertension) == "Valor"] <- "Prev.hiper"
+names(cardiabameric)[names(cardiabameric) == "Valor"] <- "Prev.cardiac"
+names(cardiabameric)[names(cardiabameric) == "Prev.cruda"] <- "Prev.diab"
+
+
+enfermedades <- merge(cardiabameric, hipertension, by = c("Pais", "Sexo", "Año"))
+enfermedades
+
+```
+```{r}
+alimentos
+
+obesidad <- obesidad %>%
+  select(-c(Min, Max))
+names(obesidad)[names(obesidad) == "Media"] <- "Media.obes"
+obesidad
+
+alimobes <- merge(obesidad, alimentos, by = c("Pais", "Año"))
+alimobes
+
+```
+
+Como no hay ningún país que concuerda con cantidad, este no nos sirve.
+```{r}
+calesperanzacant <- merge(calesperanza, alimentos, by = c("Pais", "Año"))
+
+calesperanzacant
+```
+
+```{r}
+names(obesidad)[names(obesidad) == "Media"] <- "Media.obes"
+obesidad$Sexo[obesidad$Sexo == "Male"] <- "Men"
+obesidad$Sexo[obesidad$Sexo == "Female"] <- "Women"
+obesidad <- obesidad %>%
+  select(-Indicador)
+obesidad
+names(diabetes)[names(diabetes) == "Prev.cruda"] <- "Prev.diab"
+diabetes <- diabetes %>%
+  select(-c(Lim.Inf, Lim.Sup, ISO))
+
+diabetes
+```
+
+OBJETIVO 2
+```{r}
+diabobes <- merge(diabetes, obesidad, by = c("Pais", "Año", "Sexo"))
+diabobes
+```
+
+OBJETIVO 4
+```{r}
+esperobes <- merge(esperanza, obesidad, by = c("Pais", "Año"))
+espcalob <- merge(esperobes, calbien, by = c("Pais", "Año"))
+espcalob
+```
+```{r}
+enfermedades
+obesidad
+esperanza
+```
+
+
+OBJETIVO 5
+```{r}
+enfermedades <- merge(enfermedades, obesidad, by = c("Pais", "Sexo", "Año"))
+gastsalenferm <- merge(enfermedades, esperanza, by = c("Pais", "Año"))
+gastsalenferm
+```
+
+
+```{r}
+# Número total de filas
+total_filas <- nrow(comida)
+
+# Calcular número de NA y porcentaje por columna
+faltantes <- sapply(comida, function(x) sum(is.na(x)))
+porcentaje <- round((faltantes / total_filas) * 100, 2)
+
+# Crear un data frame con la información
+resumen_faltantes <- data.frame(
+  Columna = names(faltantes),
+  Faltantes = faltantes,
+  Porcentaje = porcentaje)
+
+# Mostrar el resumen
+resumen_faltantes
+
+```
+
+OBJETIVO 1
+```{r}
+names(comida)[names(comida) == "Area"] <- "Pais"
+names(comida)[names(comida) == "Year"] <- "Año"
+
+cantcalesperanza <- merge(comida, calesperanza, by = c("Pais", "Año"))
+
+```
+
+
+OBJETIVO 3
+```{r}
+comcardesp = merge(comida, gastsalenferm, by = c("Pais", "Año"))
+comcardesp
+
+```
+
+

@@ -1,0 +1,265 @@
+Pais,Año,Codigo_comida,Comida,Unidad,Valor
+Afghanistan ,2020,FG9,Vegetables and their products,g/cap/d,118.4
+Afghanistan,2020,FG10,Fruits and their products,g/cap/d,70.2
+Afghanistan,2020,FG11,Fats and oils,g/cap/d,41.4
+Afghanistan,2020,FG12,Sweets and sugars,g/cap/d,37.4
+Argentina,2018,FG9,Vegetables and their products,g/cap/d,99.7
+Argentina,2018,FG10,Fruits and their products,g/cap/d,52
+Argentina,2018,FG11,Fats and oils,g/cap/d,19.9
+Argentina,2018,FG12,Sweets and sugars,g/cap/d,48.4
+Argentina,2018,FG17,Food additives,g/cap/d,0.8
+Armenia,2019,FG9,Vegetables and their products,g/cap/d,148.3
+Armenia,2019,FG10,Fruits and their products,g/cap/d,82.2
+Armenia,2019,FG11,Fats and oils,g/cap/d,21.6
+Armenia,2019,FG12,Sweets and sugars,g/cap/d,52.9
+Armenia,2019,FG17,Food additives,g/cap/d,0
+Armenia,2020,FG9,Vegetables and their products,g/cap/d,166.4
+Armenia,2020,FG10,Fruits and their products,g/cap/d,83.2
+Armenia,2020,FG11,Fats and oils,g/cap/d,24.2
+Armenia,2020,FG12,Sweets and sugars,g/cap/d,63.5
+Armenia,2020,FG17,Food additives,g/cap/d,0
+Armenia,2021,FG9,Vegetables and their products,g/cap/d,170.5
+Armenia,2021,FG10,Fruits and their products,g/cap/d,100.5
+Armenia,2021,FG11,Fats and oils,g/cap/d,24.4
+Armenia,2021,FG12,Sweets and sugars,g/cap/d,74.3
+Armenia,2022,FG9,Vegetables and their products,g/cap/d,153.2
+Armenia,2022,FG10,Fruits and their products,g/cap/d,85.5
+Armenia,2022,FG11,Fats and oils,g/cap/d,22.3
+Armenia,2022,FG12,Sweets and sugars,g/cap/d,61.2
+Armenia,2022,FG17,Food additives,g/cap/d,0.1
+Bangladesh,2010,FG9,Vegetables and their products,g/cap/d,137.7
+Bangladesh,2010,FG10,Fruits and their products,g/cap/d,30.1
+Bangladesh,2010,FG11,Fats and oils,g/cap/d,20.5
+Bangladesh,2010,FG12,Sweets and sugars,g/cap/d,14.8
+Bangladesh,2016,FG9,Vegetables and their products,g/cap/d,136.4
+Bangladesh,2016,FG10,Fruits and their products,g/cap/d,25.4
+Bangladesh,2016,FG11,Fats and oils,g/cap/d,26.4
+Bangladesh,2016,FG12,Sweets and sugars,g/cap/d,16.8
+Benin,2019,FG9,Vegetables and their products,g/cap/d,65.9
+Benin,2019,FG10,Fruits and their products,g/cap/d,72.6
+Benin,2019,FG11,Fats and oils,g/cap/d,26.7
+Benin,2019,FG12,Sweets and sugars,g/cap/d,15
+Benin,2019,FG17,Food additives,g/cap/d,0.1
+Benin,2022,FG9,Vegetables and their products,g/cap/d,87.1
+Benin,2022,FG10,Fruits and their products,g/cap/d,68.3
+Benin,2022,FG11,Fats and oils,g/cap/d,34.4
+Benin,2022,FG12,Sweets and sugars,g/cap/d,21.7
+Benin,2022,FG17,Food additives,g/cap/d,0.1
+Bolivia,2015,FG9,Vegetables and their products,g/cap/d,114.1
+Bolivia,2015,FG10,Fruits and their products,g/cap/d,97.5
+Bolivia,2015,FG11,Fats and oils,g/cap/d,17.9
+Bolivia,2015,FG12,Sweets and sugars,g/cap/d,40.4
+Bolivia,2015,FG17,Food additives,g/cap/d,0.1
+Burkina Faso,2019,FG9,Vegetables and their products,g/cap/d,57.5
+Burkina Faso,2019,FG10,Fruits and their products,g/cap/d,20
+Burkina Faso,2019,FG11,Fats and oils,g/cap/d,12.4
+Burkina Faso,2019,FG12,Sweets and sugars,g/cap/d,16.3
+Burkina Faso,2019,FG17,Food additives,g/cap/d,0.4
+Burkina Faso,2022,FG9,Vegetables and their products,g/cap/d,63.3
+Burkina Faso,2022,FG10,Fruits and their products,g/cap/d,24.8
+Burkina Faso,2022,FG11,Fats and oils,g/cap/d,12.7
+Burkina Faso,2022,FG12,Sweets and sugars,g/cap/d,17.4
+Burkina Faso,2022,FG17,Food additives,g/cap/d,0.3
+Chile,2022,FG9,Vegetables and their products,g/cap/d,140.2
+Chile,2022,FG10,Fruits and their products,g/cap/d,110
+Chile,2022,FG11,Fats and oils,g/cap/d,27.7
+Chile,2022,FG12,Sweets and sugars,g/cap/d,55.3
+Chile,2022,FG17,Food additives,g/cap/d,1.1
+Costa Rica,2019,FG9,Vegetables and their products,g/cap/d,85.3
+Costa Rica,2019,FG10,Fruits and their products,g/cap/d,66.4
+Costa Rica,2019,FG11,Fats and oils,g/cap/d,31.4
+Costa Rica,2019,FG12,Sweets and sugars,g/cap/d,82.1
+Costa Rica,2019,FG17,Food additives,g/cap/d,0.2
+Côte d'Ivoire,2019,FG9,Vegetables and their products,g/cap/d,81
+Côte d'Ivoire,2019,FG10,Fruits and their products,g/cap/d,52
+Côte d'Ivoire,2019,FG11,Fats and oils,g/cap/d,15.4
+Côte d'Ivoire,2019,FG12,Sweets and sugars,g/cap/d,13.7
+Côte d'Ivoire,2019,FG17,Food additives,g/cap/d,0.1
+Côte d'Ivoire,2022,FG9,Vegetables and their products,g/cap/d,70
+Côte d'Ivoire,2022,FG10,Fruits and their products,g/cap/d,53.8
+Côte d'Ivoire,2022,FG11,Fats and oils,g/cap/d,12
+Côte d'Ivoire,2022,FG12,Sweets and sugars,g/cap/d,12.2
+Côte d'Ivoire,2022,FG17,Food additives,g/cap/d,0.1
+Ethiopia,2016,FG9,Vegetables and their products,g/cap/d,68.2
+Ethiopia,2016,FG10,Fruits and their products,g/cap/d,11.4
+Ethiopia,2016,FG11,Fats and oils,g/cap/d,16.5
+Ethiopia,2016,FG12,Sweets and sugars,g/cap/d,11
+Ethiopia,2019,FG9,Vegetables and their products,g/cap/d,83.6
+Ethiopia,2019,FG10,Fruits and their products,g/cap/d,16.3
+Ethiopia,2019,FG11,Fats and oils,g/cap/d,17.1
+Ethiopia,2019,FG12,Sweets and sugars,g/cap/d,14.2
+Guatemala,2014,FG9,Vegetables and their products,g/cap/d,101.3
+Guatemala,2014,FG10,Fruits and their products,g/cap/d,72.1
+Guatemala,2014,FG11,Fats and oils,g/cap/d,12.4
+Guatemala,2014,FG12,Sweets and sugars,g/cap/d,51.4
+Guinea-Bissau,2019,FG9,Vegetables and their products,g/cap/d,53.8
+Guinea-Bissau,2019,FG10,Fruits and their products,g/cap/d,42.4
+Guinea-Bissau,2019,FG11,Fats and oils,g/cap/d,24.5
+Guinea-Bissau,2019,FG12,Sweets and sugars,g/cap/d,27.3
+Guinea-Bissau,2019,FG17,Food additives,g/cap/d,0.3
+Guinea-Bissau,2022,FG9,Vegetables and their products,g/cap/d,43.8
+Guinea-Bissau,2022,FG10,Fruits and their products,g/cap/d,46.6
+Guinea-Bissau,2022,FG11,Fats and oils,g/cap/d,30.9
+Guinea-Bissau,2022,FG12,Sweets and sugars,g/cap/d,29.4
+Guinea-Bissau,2022,FG17,Food additives,g/cap/d,0.2
+India,2012,FG9,Vegetables and their products,g/cap/d,137.8
+India,2012,FG10,Fruits and their products,g/cap/d,36.1
+India,2012,FG11,Fats and oils,g/cap/d,25.1
+India,2012,FG12,Sweets and sugars,g/cap/d,26.7
+Kazakhstan,2021,FG9,Vegetables and their products,g/cap/d,186.3
+Kazakhstan,2021,FG10,Fruits and their products,g/cap/d,123.3
+Kazakhstan,2021,FG11,Fats and oils,g/cap/d,52.4
+Kazakhstan,2021,FG12,Sweets and sugars,g/cap/d,137.8
+Kazakhstan,2021,FG17,Food additives,g/cap/d,1.2
+Kazakhstan,2022,FG9,Vegetables and their products,g/cap/d,184.2
+Kazakhstan,2022,FG10,Fruits and their products,g/cap/d,122.1
+Kazakhstan,2022,FG11,Fats and oils,g/cap/d,51
+Kazakhstan,2022,FG12,Sweets and sugars,g/cap/d,122.6
+Kazakhstan,2022,FG17,Food additives,g/cap/d,0.7
+Kazakhstan,2023,FG9,Vegetables and their products,g/cap/d,185.7
+Kazakhstan,2023,FG10,Fruits and their products,g/cap/d,126.6
+Kazakhstan,2023,FG11,Fats and oils,g/cap/d,50.6
+Kazakhstan,2023,FG12,Sweets and sugars,g/cap/d,121.5
+Kazakhstan,2023,FG17,Food additives,g/cap/d,0.6
+Kenya,2016,FG9,Vegetables and their products,g/cap/d,163
+Kenya,2016,FG10,Fruits and their products,g/cap/d,66.2
+Kenya,2016,FG11,Fats and oils,g/cap/d,18.2
+Kenya,2016,FG12,Sweets and sugars,g/cap/d,43.1
+Kiribati,2020,FG9,Vegetables and their products,g/cap/d,46.2
+Kiribati,2020,FG10,Fruits and their products,g/cap/d,81.4
+Kiribati,2020,FG11,Fats and oils,g/cap/d,10.1
+Kiribati,2020,FG12,Sweets and sugars,g/cap/d,120.2
+Kiribati,2020,FG17,Food additives,g/cap/d,0
+Malawi,2017,FG9,Vegetables and their products,g/cap/d,135.3
+Malawi,2017,FG10,Fruits and their products,g/cap/d,26
+Malawi,2017,FG11,Fats and oils,g/cap/d,12.2
+Malawi,2017,FG12,Sweets and sugars,g/cap/d,23.7
+Malawi,2020,FG9,Vegetables and their products,g/cap/d,147.9
+Malawi,2020,FG10,Fruits and their products,g/cap/d,38.2
+Malawi,2020,FG11,Fats and oils,g/cap/d,13.3
+Malawi,2020,FG12,Sweets and sugars,g/cap/d,22.9
+Mali,2019,FG9,Vegetables and their products,g/cap/d,62.6
+Mali,2019,FG10,Fruits and their products,g/cap/d,43.4
+Mali,2019,FG11,Fats and oils,g/cap/d,25.9
+Mali,2019,FG12,Sweets and sugars,g/cap/d,40.2
+Mali,2019,FG17,Food additives,g/cap/d,0.2
+Mali,2022,FG9,Vegetables and their products,g/cap/d,56.3
+Mali,2022,FG10,Fruits and their products,g/cap/d,28.2
+Mali,2022,FG11,Fats and oils,g/cap/d,20.7
+Mali,2022,FG12,Sweets and sugars,g/cap/d,53.1
+Mali,2022,FG17,Food additives,g/cap/d,0.1
+Mexico,2012,FG9,Vegetables and their products,g/cap/d,106.4
+Mexico,2012,FG10,Fruits and their products,g/cap/d,58
+Mexico,2012,FG11,Fats and oils,g/cap/d,13.6
+Mexico,2012,FG12,Sweets and sugars,g/cap/d,44.7
+Mexico,2014,FG9,Vegetables and their products,g/cap/d,113.6
+Mexico,2014,FG10,Fruits and their products,g/cap/d,57.4
+Mexico,2014,FG11,Fats and oils,g/cap/d,13.1
+Mexico,2014,FG12,Sweets and sugars,g/cap/d,41.4
+Mexico,2018,FG9,Vegetables and their products,g/cap/d,109.5
+Mexico,2018,FG10,Fruits and their products,g/cap/d,52.8
+Mexico,2018,FG11,Fats and oils,g/cap/d,13.1
+Mexico,2018,FG12,Sweets and sugars,g/cap/d,43.1
+Mexico,2020,FG9,Vegetables and their products,g/cap/d,115.3
+Mexico,2020,FG10,Fruits and their products,g/cap/d,59.2
+Mexico,2020,FG11,Fats and oils,g/cap/d,13
+Mexico,2020,FG12,Sweets and sugars,g/cap/d,40
+Mexico,2022,FG9,Vegetables and their products,g/cap/d,112.6
+Mexico,2022,FG10,Fruits and their products,g/cap/d,53.5
+Mexico,2022,FG11,Fats and oils,g/cap/d,13
+Mexico,2022,FG12,Sweets and sugars,g/cap/d,40
+Myanmar,2015,FG9,Vegetables and their products,g/cap/d,185.3
+Myanmar,2015,FG10,Fruits and their products,g/cap/d,74.5
+Myanmar,2015,FG11,Fats and oils,g/cap/d,27.7
+Myanmar,2015,FG12,Sweets and sugars,g/cap/d,11.7
+Niger,2019,FG9,Vegetables and their products,g/cap/d,68.3
+Niger,2019,FG10,Fruits and their products,g/cap/d,18.9
+Niger,2019,FG11,Fats and oils,g/cap/d,13.7
+Niger,2019,FG12,Sweets and sugars,g/cap/d,16.6
+Niger,2019,FG17,Food additives,g/cap/d,0.6
+Niger,2022,FG9,Vegetables and their products,g/cap/d,52.4
+Niger,2022,FG10,Fruits and their products,g/cap/d,10.7
+Niger,2022,FG11,Fats and oils,g/cap/d,14.8
+Niger,2022,FG12,Sweets and sugars,g/cap/d,11.4
+Niger,2022,FG17,Food additives,g/cap/d,0.7
+Nigeria,2019,FG9,Vegetables and their products,g/cap/d,84.9
+Nigeria,2019,FG10,Fruits and their products,g/cap/d,86.3
+Nigeria,2019,FG11,Fats and oils,g/cap/d,21.9
+Nigeria,2019,FG12,Sweets and sugars,g/cap/d,8.6
+Pakistan,2012,FG9,Vegetables and their products,g/cap/d,83.5
+Pakistan,2012,FG10,Fruits and their products,g/cap/d,61.6
+Pakistan,2012,FG11,Fats and oils,g/cap/d,30.4
+Pakistan,2012,FG12,Sweets and sugars,g/cap/d,49.4
+Pakistan,2014,FG9,Vegetables and their products,g/cap/d,88.7
+Pakistan,2014,FG10,Fruits and their products,g/cap/d,37.4
+Pakistan,2014,FG11,Fats and oils,g/cap/d,29.8
+Pakistan,2014,FG12,Sweets and sugars,g/cap/d,69.2
+Pakistan,2019,FG9,Vegetables and their products,g/cap/d,102.7
+Pakistan,2019,FG10,Fruits and their products,g/cap/d,44.2
+Pakistan,2019,FG11,Fats and oils,g/cap/d,34.4
+Pakistan,2019,FG12,Sweets and sugars,g/cap/d,55.9
+Peru,2019,FG9,Vegetables and their products,g/cap/d,150
+Peru,2019,FG10,Fruits and their products,g/cap/d,164.6
+Peru,2019,FG11,Fats and oils,g/cap/d,18.1
+Peru,2019,FG12,Sweets and sugars,g/cap/d,51.9
+Peru,2019,FG17,Food additives,g/cap/d,0
+Peru,2023,FG9,Vegetables and their products,g/cap/d,149.5
+Peru,2023,FG10,Fruits and their products,g/cap/d,149.5
+Peru,2023,FG11,Fats and oils,g/cap/d,17.8
+Peru,2023,FG12,Sweets and sugars,g/cap/d,49.7
+Peru,2023,FG17,Food additives,g/cap/d,0
+Samoa,2018,FG9,Vegetables and their products,g/cap/d,67.1
+Samoa,2018,FG10,Fruits and their products,g/cap/d,91.3
+Samoa,2018,FG11,Fats and oils,g/cap/d,10.7
+Samoa,2018,FG12,Sweets and sugars,g/cap/d,131.4
+Samoa,2018,FG17,Food additives,g/cap/d,0.1
+Senegal,2019,FG9,Vegetables and their products,g/cap/d,101
+Senegal,2019,FG10,Fruits and their products,g/cap/d,31.4
+Senegal,2019,FG11,Fats and oils,g/cap/d,44.8
+Senegal,2019,FG12,Sweets and sugars,g/cap/d,51
+Senegal,2019,FG17,Food additives,g/cap/d,0.2
+Senegal,2022,FG9,Vegetables and their products,g/cap/d,102.2
+Senegal,2022,FG10,Fruits and their products,g/cap/d,41.8
+Senegal,2022,FG11,Fats and oils,g/cap/d,46.5
+Senegal,2022,FG12,Sweets and sugars,g/cap/d,42
+Senegal,2022,FG17,Food additives,g/cap/d,0.1
+Solomon Islands,2013,FG9,Vegetables and their products,g/cap/d,108.4
+Solomon Islands,2013,FG10,Fruits and their products,g/cap/d,64.3
+Solomon Islands,2013,FG11,Fats and oils,g/cap/d,3.2
+Solomon Islands,2013,FG12,Sweets and sugars,g/cap/d,34.6
+Solomon Islands,2013,FG17,Food additives,g/cap/d,0.1
+Somalia,2022,FG9,Vegetables and their products,g/cap/d,132
+Somalia,2022,FG10,Fruits and their products,g/cap/d,52.2
+Somalia,2022,FG11,Fats and oils,g/cap/d,33
+Somalia,2022,FG12,Sweets and sugars,g/cap/d,95.6
+Somalia,2022,FG17,Food additives,g/cap/d,0.2
+Timor-Leste,2014,FG9,Vegetables and their products,g/cap/d,145.8
+Timor-Leste,2014,FG10,Fruits and their products,g/cap/d,61.5
+Timor-Leste,2014,FG11,Fats and oils,g/cap/d,31.2
+Timor-Leste,2014,FG12,Sweets and sugars,g/cap/d,45.8
+Timor-Leste,2014,FG17,Food additives,g/cap/d,8
+Togo,2019,FG9,Vegetables and their products,g/cap/d,73.9
+Togo,2019,FG10,Fruits and their products,g/cap/d,54.8
+Togo,2019,FG11,Fats and oils,g/cap/d,18.3
+Togo,2019,FG12,Sweets and sugars,g/cap/d,8.4
+Togo,2019,FG17,Food additives,g/cap/d,0.2
+Togo,2022,FG9,Vegetables and their products,g/cap/d,73.9
+Togo,2022,FG10,Fruits and their products,g/cap/d,34.8
+Togo,2022,FG11,Fats and oils,g/cap/d,17.2
+Togo,2022,FG12,Sweets and sugars,g/cap/d,8.9
+Togo,2022,FG17,Food additives,g/cap/d,0.1
+Tonga,2016,FG9,Vegetables and their products,g/cap/d,80.7
+Tonga,2016,FG10,Fruits and their products,g/cap/d,157.1
+Tonga,2016,FG11,Fats and oils,g/cap/d,15.9
+Tonga,2016,FG12,Sweets and sugars,g/cap/d,93.8
+Tonga,2016,FG17,Food additives,g/cap/d,0.4
+United Republic of Tanzania,2018,FG9,Vegetables and their products,g/cap/d,111.1
+United Republic of Tanzania,2028,FG10,Fruits and their products,g/cap/d,20.7
+United Republic of Tanzania,2018,FG11,Fats and oils,g/cap/d,18.9
+United Republic of Tanzania,2018,FG12,Sweets and sugars,g/cap/d,19.7
+United Republic of Tanzania,2018,FG17,Food additives,g/cap/d,0
+Uruguay,2017,FG9,Vegetables and their products,g/cap/d,110.6
+Uruguay,2017,FG10,Fruits and their products,g/cap/d,108.3
+Uruguay,2017,FG11,Fats and oils,g/cap/d,28.8
+Uruguay,2017,FG12,Sweets and sugars,g/cap/d,73.9
+Uruguay,2017,FG17,Food additives,g/cap/d,1

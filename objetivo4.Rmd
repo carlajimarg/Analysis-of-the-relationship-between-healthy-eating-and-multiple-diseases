@@ -1,0 +1,343 @@
+---
+title: "objetivo 4"
+author: "Marta"
+date: "`r Sys.Date()`"
+output:
+  html_document: default
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(dplyr)  
+library(stats)   
+library(factoextra) 
+library(ggplot2) 
+library(tidyr)
+library(maps)
+library(plotly)
+library(corrplot)
+library(cluster)
+```
+El dataset tenía muchos problemas, como esta con comas, al pasar a tipo numerico los numeros o cambiaban completamente o se sustituian por NA, el porcentaje tp estaba en un formato incorrecto desde el momento de exportarlo
+
+```{r leer}
+data = read.csv("espcalob.csv")
+
+data1 = data.frame("variable" = colnames(data),
+                      "tipo" = c(rep("categorical",3), rep("numerical", 10), 
+                                 rep("categorical",2), rep("numerical",4)), stringsAsFactors = FALSE)
+```
+
+El siguiente código es una función para pasar las columnas al tipo de datos que especifico. Cuando es de tipo numerica se sustituyen las comas por los puntos, porque anteriormente solo las variables con valores de numeros redondos eran reconocidas como variables numericas.
+
+```{r clase, echo=FALSE}
+convertir_tipos <- function(df, clase) {
+  for (col in clase$variable) {
+    tipo <- clase$tipo[clase$variable == col]
+    if (tipo == "categorical") {
+      df[[col]] <- as.factor(df[[col]])} 
+    else if (tipo == "numerical") {
+      if (is.character(df[[col]])) {
+        df[[col]] <- as.numeric(gsub(",", ".", df[[col]]))} 
+      else {
+        df[[col]] <- as.numeric(df[[col]])}}}
+  return(df)
+}
+
+data <- convertir_tipos(data, data1)
+summary(data)
+```
+
+Hay 396 datos faltantes. Proceden de variables como Alchol, Gasto, PIB, Poblacion y IDH. De estos, solo nos interesa estudiar en general el IDH y como se relaciona con la obesidad y las calorias. Asi que los que no tienen IDH se eliminan. Ahora ya no hay NA.
+
+
+```{r na}
+cat("Total de valores faltantes en el conjunto de datos:", sum(is.na(data)), "\n")
+cat("Variables con valores faltantes:\n")
+print(colSums(is.na(data))[colSums(is.na(data)) > 0])
+```
+168 filas se ven afectadas por los datos faltantes, pero solo interesan los respectivos al IDH.
+
+```{r filasna}
+print(data[!complete.cases(data), ])
+```
+
+Se eliminan las filas sin el IDH, ya que nos centramos en estudiar la obesidad y las calorias en base a eso.
+
+```{r boxplot}
+#ahora tiene 1200 observaciónes
+dataset = data[!is.na(data$IDH), ]
+
+# Boxplot de variables escaladas
+datos_escalados <- dataset %>% 
+  select(where(is.numeric)) %>% 
+  scale() %>% 
+  as.data.frame() %>% 
+  pivot_longer(everything(), names_to = "variable", values_to = "valor")
+ggplot(datos_escalados, aes(x = variable, y = valor)) +
+  geom_boxplot(fill = "lightblue", outlier.color = "red") +
+  labs(title = "Boxplots", x = "", y = "Valores") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
+#Selecciono solo 2015 y de ambos sexos. Como hay datos para hombres, para mujeres y por años, concreto unos valores.
+dataset2015 <- dataset %>%
+  filter(Sexo == "Both sexes", Año == 2015)
+```
+CON DATASET2015:
+
+Cluster 1: Países con obesidad y dietas normales en calorías (dietas altas en calorías y obesidad, pero IDH no alto).
+Cluster 2: Corresponde a países desarrollados (alto IDH, buena alimentación, baja obesidad).
+
+
+```{r dispersión}
+datos_numericos <- scale(dataset2015[, c("IDH", "Total.kcal", "Media.obes")]) 
+set.seed(123)
+kmeans_result <- kmeans(datos_numericos, centers = 2)
+dataset2015$cluster_kmeans <- as.factor(kmeans_result$cluster)
+ggplot(dataset2015, aes(x = Media.obes, y = IDH, color = cluster_kmeans)) +
+  geom_point() + theme_minimal()
+kmeans_result$centers
+```
+
+
+```{r clusterdataset}
+clusters_2015 <- dataset2015 %>%select(Pais, cluster_kmeans) 
+dataset <- dataset %>% left_join(clusters_2015, by = "Pais")  # Asigna el cluster de 2015 a todos los años
+
+#En dataset solo escojo los datos de ambos sexos
+dataset <- dataset %>%
+filter(Sexo == "Both sexes")
+
+```
+
+
+Ahora se realiza un gráfico para ver como han evolucionado los valores de los paises a lo largo de los años. Como hay varios paises, se estudiara según los clusters anteriores de cada pais, usando la media de obesidad por cluster y por año como valor a representar (k means).
+
+```{r obesidad}
+ggplot(dataset, aes(
+  x = Año,
+  y = Media.obes,
+  color = as.factor(cluster_kmeans),
+  group = interaction(Pais, cluster_kmeans))) +
+  geom_line(alpha = 0.4) +geom_smooth(aes(group = cluster_kmeans), se = FALSE, linewidth = 1.5) +
+  labs(title = "Evolución del Media.obes por país", x = "Año",
+    y = "Media.obes", color = "Cluster") + scale_color_manual(values = 
+   c("#1b9e77", "#7570b3"),labels = c("Cluster 1", "Cluster 2")) +theme_minimal()
+```
+
+```{r idh}
+ggplot(dataset, aes(
+  x = Año,
+  y = IDH,
+  color = as.factor(cluster_kmeans),
+  group = interaction(Pais, cluster_kmeans) )) +
+  geom_line(alpha = 0.4) +geom_smooth(aes(group = cluster_kmeans), se = FALSE, linewidth = 1.5) +
+  labs(title = "Evolución del IDH por país", x = "Año",
+    y = "IDH", color = "Cluster") + scale_color_manual(values = 
+   c("#1b9e77","#7570b3"),labels = c("Cluster 1", "Cluster 2")) +theme_minimal()
+```
+
+```{r kcal}
+ggplot(dataset, aes(
+  x = Año,
+  y = Total.kcal,
+  color = as.factor(cluster_kmeans),
+  group = interaction(Pais, cluster_kmeans))) +
+  geom_line(alpha = 0.4) +geom_smooth(aes(group = cluster_kmeans), se = FALSE, linewidth = 1.5) +
+  labs(title = "Evolución del Total.kcal por país", x = "Año",
+    y = "Total.kcal", color = "Cluster") + scale_color_manual(values = 
+   c("#1b9e77", "#7570b3"),labels = c("Cluster 1", "Cluster 2")) +theme_minimal()
+```
+
+```{r clus1}
+
+cluster1_data <- dataset %>%
+  filter(cluster_kmeans == 1) %>% group_by(Año) %>%
+  summarise(Total = mean(Total.kcal, na.rm = TRUE), Animal = mean(Animal.kcal, na.rm = TRUE),
+    Vegetal = mean(Vegetal.kcal, na.rm = TRUE)) %>% tidyr::pivot_longer(cols = c(Total, Animal, Vegetal),
+    names_to = "Tipo", values_to = "kcal")
+ggplot(cluster1_data, aes(x = Año, y = kcal, color = Tipo, linetype = Tipo)) + 
+  geom_line(linewidth = 1.2) + geom_point(size = 3) +
+  scale_color_manual( values = c("Total" = "black", "Animal" = "#d90f09", "Vegetal" = "#1b9e77")) + scale_linetype_manual( values = c("Total" = "solid", "Animal" = "dashed", "Vegetal" = "dotted") ) +
+  labs(  title = "Consumo Calórico en Cluster 1 (2000-2015)", 
+      subtitle = "Total.kcal = Animal.kcal + Vegetal.kcal",  y = "kcal per cápita/día",  x = "Año" ) + theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+```{r clus2}
+cluster1_data <- dataset %>%
+  filter(cluster_kmeans == 2) %>% group_by(Año) %>%
+  summarise(Total = mean(Total.kcal, na.rm = TRUE), Animal = mean(Animal.kcal, na.rm = TRUE),
+    Vegetal = mean(Vegetal.kcal, na.rm = TRUE)) %>% tidyr::pivot_longer(cols = c(Total, Animal, Vegetal),
+    names_to = "Tipo", values_to = "kcal")
+ggplot(cluster1_data, aes(x = Año, y = kcal, color = Tipo, linetype = Tipo)) + 
+  geom_line(linewidth = 1.2) + geom_point(size = 3) +
+  scale_color_manual( values = c("Total" = "black", "Animal" = "#d90f09", "Vegetal" = "#1b9e77")) + scale_linetype_manual( values = c("Total" = "solid", "Animal" = "dashed", "Vegetal" = "dotted") ) +
+  labs(  title = "Consumo Calórico en Cluster 2 (2000-2015)", 
+      subtitle = "Total.kcal = Animal.kcal + Vegetal.kcal",  y = "kcal per cápita/día",  x = "Año" ) + theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+
+#TESTS
+
+Cual es el mejor metodo para estudiar la relación? Spearman
+
+```{r silhouette}
+ggplot(dataset2015, aes(x = Media.obes, y = IDH, color = as.factor(cluster_kmeans))) +
+  geom_point(size = 3, alpha = 0.7) +
+  labs(title = "Asignación de Clusters: IDH vs Obesidad")
+
+dist_mat <- dist(scale(dataset2015[, c("Media.obes", "IDH")]))
+silhouette_score <- silhouette(as.numeric(dataset2015$cluster_kmeans), dist_mat)
+summary(silhouette_score)
+plot(silhouette_score)
+#El coeficiente de silhouette no es muy alto, pero es mejor con 2 clusters que con 3 o 4
+```
+
+Correlación (r): -0.5138462  -> Relación negativa moderada.
+A mayor IDH, menor obesidad.
+
+```{r cor}
+cor.test(dataset2015$IDH, dataset2015$Media.obes, method = "spearman")
+
+variables <- dataset[, c("Total.kcal", "Media.obes", "IDH", "Vegetal.kcal", "Animal.kcal")]
+cor_pearson <- round(cor(variables, method = "pearson"), 2)
+cor_spearman <- round(cor(variables, method = "spearman"), 2)
+
+diff_matrix <- abs(cor_pearson - cor_spearman)
+print(diff_matrix) #spearman es mejor porque hay relaciones no liniales, por eso es mas alto su valor
+```
+Estudio las relaciones con el dataset que contiene información sobre diversos años:
+
+El consumo calórico total (Total.kcal) no está asociado significativamente con la obesidad 
+A mayor Kcal, mayor IDH, pero su poca correlación es lineal.
+
+```{r matrix}
+cor_matrix <- cor(variables, method = "spearman")  
+corrplot(cor_matrix, method = "number")
+cor.test(dataset2015$IDH, dataset2015$Media.obes, method = "spearman")
+cor.test(dataset2015$Total.kcal, dataset2015$Media.obes, method = "spearman")
+cor.test(dataset2015$IDH, dataset2015$Total.kcal, method = "pearson")
+cor.test(dataset2015$IDH, dataset2015$Animal.kcal, method = "pearson")
+```
+Significancia estadística (p=0.418):
+El consumo de calorías vegetales no está asociado significativamente con la obesidad en tu muestra.
+
+Coeficiente de correlación (r=-0.312):
+A mayor consumo de calorías animales, menor obesidad, pero la asociación no es fuerte.
+
+```{r correlación}
+# Correlación entre obesidad y calorías vegetales
+cor.test(dataset2015$Vegetal.kcal, dataset2015$Media.obes, method = "pearson")
+
+# Correlación entre obesidad y calorías animales
+cor.test(dataset2015$Animal.kcal, dataset2015$Media.obes, method = "pearson")
+```
+
+#REPRESENTACIONES
+
+```{r mapa obesidad}
+# Países de Europa a dibujar (no se tiene info de todos)
+europe_countries <- c("Albania", "Austria", "Belgium", "Bulgaria", "Croatia", "Cyprus", "Czech Republic",
+  "Denmark", "Estonia", "Finland", "France", "Germany", "Greece", "Hungary",
+  "Iceland", "Ireland", "Italy", "Latvia", "Lithuania", "Luxembourg", "Malta",
+  "Netherlands", "Norway", "Poland", "Portugal", "Romania", "Slovakia",
+  "Slovenia", "Spain", "Sweden", "Switzerland", "UK", "Turkey")
+
+# Se cambian nombres para que coincidan con map_data("world")
+dataset2015_europa <- dataset2015 %>%
+  mutate(
+    Pais = case_when(
+      Pais == "Czechia" ~ "Czech Republic",
+      Pais == "Russia" ~ "Russian Federation",
+      Pais == "United Kingdom" ~ "UK",
+      TRUE ~ Pais)) %>% 
+  filter(Pais %in% europe_countries)
+
+europe_map <- map_data("world") %>% filter(region %in% europe_countries)
+
+europe_data <- europe_map %>%
+  left_join(dataset2015_europa, by = c("region" = "Pais"))
+ggplot(europe_data, aes(x = long, y = lat, group = group, fill = Media.obes)) +
+  geom_polygon(color = "white", size = 0.2) +  
+  scale_fill_gradient(
+    name = "Obesidad (%)",
+    low = "#f7fcb9",  
+    high = "#d95f0e", 
+    na.value = "gray80") +
+  labs(
+    title = "Prevalencia de Obesidad en Europa (2015)",
+    subtitle = "Datos para ambos sexos",
+    caption = "Fuente: FAO/OMS") + 
+  theme_void() +
+  theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 14),
+    legend.position = "right", legend.title = element_text(size = 10)) +  coord_fixed(1.3)
+```
+ 
+
+```{r mapa clusters}
+paises_europa <- c(
+  "Albania", "Austria", "Belgium", "Bulgaria", "Croatia", "Cyprus", "Czech Republic",
+  "Denmark", "Estonia", "Finland", "France", "Germany", "Greece", "Hungary",
+  "Iceland", "Ireland", "Italy", "Latvia", "Lithuania", "Luxembourg", "Malta",
+  "Netherlands", "Norway", "Poland", "Portugal", "Romania", "Slovakia",
+  "Slovenia", "Spain", "Sweden", "Switzerland", "UK", "Turkey")
+
+dataset_europe <- dataset %>%
+  mutate(
+    Pais = case_when(
+      Pais == "Czechia" ~ "Czech Republic",
+      Pais == "Russia" ~ "Russian Federation",
+      TRUE ~ Pais ) ) %>%
+  filter(Pais %in% paises_europa)
+europe_map <- map_data("world") %>%
+  filter(region %in% paises_europa)
+europe_clusters <- europe_map %>%
+  left_join(dataset_europe %>% distinct(Pais, cluster_kmeans), 
+            by = c("region" = "Pais"))
+
+ggplot(europe_clusters, aes(x = long, y = lat, group = group, fill = factor(cluster_kmeans))) +
+  geom_polygon(color = "white", size = 0.2) + scale_fill_manual( name = "Cluster",
+    values = c("1" = "#4e79a7", "2" = "#e15759"), 
+    labels = c("Cluster 1", "Cluster 2"),
+    na.value = "gray90") +labs( title = "Países de Europa por Cluster",
+    caption = "Clusters basados en IDH, Calorías y Obesidad") +
+    theme_void() + theme( plot.title = element_text(hjust = 0.5, face = "bold", size = 14),
+    legend.position = "right") + coord_fixed(1.3)  
+
+```
+Finalmente se va crear un modelo para predecir el IDH en base a las variables que más relación tienen con él. Usando Esperanza.de.vida, Mortalidad.adulta, Delgadez.1.19.años., Media.obes  y Animal.kcal.
+
+```{r modelo}
+datos_modelo <- dataset[, c("IDH", "Esperanza.de.vida", "Mortalidad.adulta", "Delgadez.1.19.años.", "Animal.kcal")]
+cor_matrix <- cor(datos_modelo, method = "spearman")
+round(cor_matrix, 2)
+
+corrplot(cor_matrix, method = "number", type = "upper", mar = c(0, 0, 1, 0))  
+
+set.seed(123)
+sample <- sample(c(TRUE, FALSE), nrow(datos_modelo), replace = TRUE, prob = c(0.8, 0.2))
+train <- datos_modelo[sample, ]
+test <- datos_modelo[!sample, ]
+
+modelo <- lm(IDH ~ Esperanza.de.vida + Delgadez.1.19.años. +I(Esperanza.de.vida^2)+ Animal.kcal, data = train) #quito mortalidad
+
+summary(modelo)
+predecir <- predict(modelo, newdata = test)
+PRESS <- sum((test$IDH - predecir)^2)
+TSS <- sum((test$IDH - mean(train$IDH))^2)
+Q2 <- 1 - (PRESS / TSS)
+print(paste("Q2(bondad de predicción):", round(Q2, 3))) #Predice bien los datos, 64%
+
+RMSE <- sqrt(mean((test$IDH - predecir)^2))
+print(paste("RMSE:", round(RMSE, 3)))
+
+dataset$IDH_predicho <- predict(modelo, newdata = dataset)
+```
+El modelo predice con poco error (0.025 respecto al IDH real) los valores de IDH
+R-squared:   prácticamente 0.7, significa que el 70% de la varianza esta explicada por el resto de variables.
+
+
